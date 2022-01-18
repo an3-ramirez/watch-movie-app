@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:watch_movie_app/src/my_app.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:watch_movie_app/src/movie_app.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(child: MovieApp()),
+  );
 }

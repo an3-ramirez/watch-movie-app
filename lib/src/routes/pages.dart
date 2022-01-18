@@ -13,7 +13,8 @@ import 'package:watch_movie_app/src/ui/pages/welcome_page.dart';
 import 'package:watch_movie_app/src/ui/pages/favorite_page.dart';
 
 abstract class Pages {
-  static const String INITIAL = Routes.HOME;
+  static const String INITIAL = Routes.WELCOME;
+  static const String HOME = Routes.HOME;
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     Routes.WELCOME: (_) => WelcomePage(),

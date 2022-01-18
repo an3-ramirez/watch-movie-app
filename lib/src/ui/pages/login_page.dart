@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:watch_movie_app/src/routes/routes.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/custom_input.dart';
 
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
 import 'package:watch_movie_app/src/utils/custom_styles.dart';
+import 'package:watch_movie_app/src/utils/responsive.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Responsive responsive = Responsive(context);
 
     return SafeArea(
       child: Stack(
@@ -16,25 +18,24 @@ class LoginPage extends StatelessWidget {
           BackgroundImage(),
           Scaffold(
             backgroundColor: Colors.transparent,
-            body: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      const Padding(
-                        padding: EdgeInsets.only(top: 50),
-                        child: Text(
-                          'Welcome!',
-                          style: CustomStyles.textWhite,
-                        ),
+            body: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: SizedBox(
+                height: responsive.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.only(top: 50),
+                      child: Text(
+                        'Welcome!',
+                        style: CustomStyles.textWhite,
                       ),
-                      _formLogin()
-                    ],
-                  ),
+                    ),
+                    _formLogin(context)
+                  ],
                 ),
-              ],
+              ),
             ),
           )
         ],
@@ -42,7 +43,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _formLogin() {
+  Widget _formLogin(context) {
     final nameCtrl = TextEditingController();
     final passCtrl = TextEditingController();
 
@@ -69,7 +70,13 @@ class LoginPage extends StatelessWidget {
           CustomInput(placeholder: 'Name', textController: nameCtrl),
           CustomInput(placeholder: 'Password', textController: passCtrl),
           const SizedBox(height: 40),
-          RoundButton(textBtn: 'Log in', color: Colors.white)
+          RoundButton(
+            textBtn: 'Log in',
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.HOME);
+            },
+          )
         ],
       ),
     );

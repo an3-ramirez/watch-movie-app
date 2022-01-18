@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+/** Providers */
+import 'package:watch_movie_app/src/data/providers/movie_provider.dart';
+
+/** Widgets */
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/star_rating.dart';
-import 'package:watch_movie_app/src/utils/custom_colors.dart';
+
+/** Models */
+import 'package:watch_movie_app/src/data/models/movie.dart';
 
 /** Utils */
+import 'package:watch_movie_app/src/utils/custom_colors.dart';
 import 'package:watch_movie_app/src/utils/custom_styles.dart';
 import 'package:watch_movie_app/src/utils/responsive.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Responsive responsive = Responsive(context);
 
     return Scaffold(
@@ -38,18 +47,30 @@ class HomePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //_popularList(),
               _title('Popular'),
-              SizedBox(
-                height: responsive.hp(35),
-                child: ListView.builder(
-                  physics: const ClampingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: _carMovie,
-                ),
-              ),
+              ref.watch(moviesFutureProvider).when(
+                    error: (e, s) {
+                      return const Text("error");
+                    },
+                    loading: () => SizedBox(
+                      height: responsive.hp(35),
+                      child: const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                    ),
+                    data: (movies) => SizedBox(
+                      height: responsive.hp(35),
+                      child: ListView.builder(
+                        physics: const ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: movies.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (_, i) {
+                          return _carMovie(_, movies[i]);
+                        },
+                      ),
+                    ),
+                  ),
               const SizedBox(height: 20),
               const Padding(
                 padding: EdgeInsets.only(right: 30),
@@ -93,16 +114,16 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _carMovie(context, i) {
+  Widget _carMovie(context, Movie movie) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: _imageCard(),
+          child: _imageCard(movie.fullImageUrl),
         ),
-        _subTitle('Game of Thrones', 150),
+        _subTitle(movie.name, 150),
         StarRating(
-          rating: 2.5,
+          rating: movie.score,
           color: Colors.white54,
           size: 15,
           onRatingChanged: (rating) {},
@@ -117,10 +138,10 @@ class HomePage extends StatelessWidget {
     return Row(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
+        /* Padding(
           padding: const EdgeInsets.only(bottom: 25),
-          child: _imageCard(),
-        ),
+          child: _imageCard(''),
+        ), */
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
           child: Column(
@@ -169,14 +190,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Container _imageCard() {
+  Container _imageCard(String url) {
     return Container(
       margin: const EdgeInsets.only(right: 23.0),
       width: 150,
       height: 170,
       decoration: BoxDecoration(
-        image: const DecorationImage(
-          image: AssetImage("assets/images/the-witcher-mobile-2.jpeg"),
+        image: DecorationImage(
+          image: NetworkImage(url),
           fit: BoxFit.cover,
         ),
         borderRadius: BorderRadius.circular(20),
