@@ -6,8 +6,8 @@ List<Movie> allMoviesFromJson(String str) {
 }
 
 class Movie {
-  String backdropPath,
-      firstAirDate,
+  String? backdropPath;
+  String firstAirDate,
       name,
       originalLanguage,
       originalName,
@@ -19,7 +19,7 @@ class Movie {
   List<int> genreIds;
 
   Movie({
-    required this.backdropPath,
+    this.backdropPath,
     required this.firstAirDate,
     required this.name,
     required this.originalLanguage,

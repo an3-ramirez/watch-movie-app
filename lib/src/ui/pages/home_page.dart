@@ -91,12 +91,27 @@ class HomePage extends ConsumerWidget {
                 child: Divider(color: Colors.white70),
               ),
               _title('Recommendations'),
-              ListView.builder(
-                physics: const ClampingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 5,
-                itemBuilder: _carMovieVertical,
-              )
+              ref.watch(moviesRecomendedFutureProvider).when(
+                    error: (e, s) {
+                      return const Text("error");
+                    },
+                    loading: () => SizedBox(
+                      height: responsive.hp(35),
+                      child: const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                    ),
+                    data: (movies) => SingleChildScrollView(
+                      child: ListView.builder(
+                        physics: const ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: 5,
+                        itemBuilder: (_, i) {
+                          return _carMovieVertical(_, movies[i]);
+                        },
+                      ),
+                    ),
+                  )
             ],
           ),
         ),
@@ -132,24 +147,24 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _carMovieVertical(context, i) {
+  Widget _carMovieVertical(context, Movie movie) {
     Responsive responsive = Responsive(context);
 
     return Row(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /* Padding(
+        Padding(
           padding: const EdgeInsets.only(bottom: 25),
-          child: _imageCard(''),
-        ), */
+          child: _imageCard(movie.fullImageUrl),
+        ),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _subTitle('Game of Thrones', 200),
+              _subTitle(movie.name, 200),
               StarRating(
-                rating: 2.5,
+                rating: movie.score,
                 color: Colors.white54,
                 size: 15,
                 onRatingChanged: (rating) {},
