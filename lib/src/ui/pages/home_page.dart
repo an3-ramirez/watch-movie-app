@@ -176,11 +176,11 @@ class HomePage extends ConsumerWidget {
               ),
               Row(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 65,
                     width: responsive.wp(39),
                     //color: Colors.amber,
-                    child: RoundButton(
+                    child: const RoundButton(
                       textBtn: 'Watch Now',
                       fontWeight: FontWeight.normal,
                       paddingHorizontal: 0,
@@ -190,7 +190,7 @@ class HomePage extends ConsumerWidget {
                   const SizedBox(width: 5),
                   InkWell(
                     onTap: () {},
-                    child: Icon(
+                    child: const Icon(
                       Icons.favorite_border_outlined,
                       color: Colors.white54,
                       size: 40,
