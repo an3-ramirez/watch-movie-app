@@ -18,7 +18,7 @@ abstract class Pages {
   static const String HOME = Routes.HOME;
 
   static final Map<String, Widget Function(BuildContext)> routes = {
-    Routes.LOADING: (_) => const LoadingPage(),
+    Routes.LOADING: (_) => LoadingPage(),
     Routes.WELCOME: (_) => WelcomePage(),
     Routes.LOGIN: (_) => LoginPage(),
     Routes.HOME: (_) => HomePage(),

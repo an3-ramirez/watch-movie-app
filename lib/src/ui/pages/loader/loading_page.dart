@@ -10,7 +10,7 @@ import 'package:watch_movie_app/src/ui/pages/home/home_page.dart';
 import 'package:watch_movie_app/src/data/providers/auth_provider.dart';
 
 class LoadingPage extends ConsumerWidget {
-  const LoadingPage({Key? key}) : super(key: key);
+  LoadingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,12 +25,15 @@ class LoadingPage extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    CircularProgressIndicator(),
+                    CircularProgressIndicator(color: Colors.white),
                     SizedBox(height: 20),
                     Text(
                       'Cargando...',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     )
                   ],
                 ),
@@ -43,10 +46,11 @@ class LoadingPage extends ConsumerWidget {
   }
 
   Future checkLoginState(BuildContext context, WidgetRef ref) async {
-    final isLogin = ref.watch(authProvider);
+    //final isLogin = ref.watch(authProvider);
     //final socketService = Provider.of<SocketService>(context, listen: false);
 
-    //final autenticado = false;
+    final isLogin = true;
+    await Future.delayed(const Duration(seconds: 2));
     if (isLogin) {
       Navigator.pushReplacement(
         context,
