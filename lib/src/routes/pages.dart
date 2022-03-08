@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:watch_movie_app/src/routes/routes.dart';
 
 /** Pages */
-import 'package:watch_movie_app/src/ui/pages/home_page.dart';
-import 'package:watch_movie_app/src/ui/pages/login_page.dart';
+import 'package:watch_movie_app/src/ui/pages/home/home_page.dart';
+import 'package:watch_movie_app/src/ui/pages/loader/loading_page.dart';
+import 'package:watch_movie_app/src/ui/pages/login/login_page.dart';
 import 'package:watch_movie_app/src/ui/pages/recent_page.dart';
 import 'package:watch_movie_app/src/ui/pages/recent_detail_page.dart';
 import 'package:watch_movie_app/src/ui/pages/serie_detail_page.dart';
@@ -13,10 +14,11 @@ import 'package:watch_movie_app/src/ui/pages/welcome_page.dart';
 import 'package:watch_movie_app/src/ui/pages/favorite_page.dart';
 
 abstract class Pages {
-  static const String INITIAL = Routes.WELCOME;
+  static const String INITIAL = Routes.LOADING;
   static const String HOME = Routes.HOME;
 
   static final Map<String, Widget Function(BuildContext)> routes = {
+    Routes.LOADING: (_) => const LoadingPage(),
     Routes.WELCOME: (_) => WelcomePage(),
     Routes.LOGIN: (_) => LoginPage(),
     Routes.HOME: (_) => HomePage(),
