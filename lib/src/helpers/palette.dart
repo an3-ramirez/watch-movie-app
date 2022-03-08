@@ -1,20 +1,38 @@
-//palette.dart
 import 'package:flutter/material.dart';
 
 class Palette {
-  static const MaterialColor kToDark = MaterialColor(
-    0xff191919, // 0% comes in here, this will be color picked if no shade is selected when defining a Color property which doesn’t require a swatch.
-    <int, Color>{
-      50: Color(0xffce5641), //10%
-      100: Color(0xffb74c3a), //20%
-      200: Color(0xffa04332), //30%
-      300: Color(0xff89392b), //40%
-      400: Color(0xff733024), //50%
-      500: Color(0xff5c261d), //60%
-      600: Color(0xff451c16), //70%
-      700: Color(0xff2e130e), //80%
-      800: Color(0xff170907), //90%
-      900: Color(0xff000000), //100%
-    },
-  );
-} // you can define define int 500 as the default shade and add your lighter tints above and darker tints below.
+  static List<Color> primaryColors = const [
+    Color(0xffd23156),
+    Color(0xff16b9fd),
+    Color(0xff13d0c1),
+    Color(0xffe5672f),
+    Color(0xffb73d99),
+  ];
+
+  static Color getShade(Color color, {bool darker = false, double value = .1}) {
+    assert(value >= 0 && value <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    final hslDark = hsl.withLightness(
+        (darker ? (hsl.lightness - value) : (hsl.lightness + value))
+            .clamp(0.0, 1.0));
+
+    return hslDark.toColor();
+  }
+
+  static MaterialColor getMaterialColorFromColor(Color color) {
+    Map<int, Color> _colorShades = {
+      50: getShade(color, value: 0.5),
+      100: getShade(color, value: 0.4),
+      200: getShade(color, value: 0.3),
+      300: getShade(color, value: 0.2),
+      400: getShade(color, value: 0.1),
+      500: color,
+      600: getShade(color, value: 0.1, darker: true),
+      700: getShade(color, value: 0.15, darker: true),
+      800: getShade(color, value: 0.2, darker: true),
+      900: getShade(color, value: 0.25, darker: true),
+    };
+    return MaterialColor(color.value, _colorShades);
+  }
+}

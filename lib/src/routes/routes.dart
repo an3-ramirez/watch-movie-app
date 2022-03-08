@@ -1,5 +1,6 @@
 abstract class Routes {
-  static const WELCOME = '/';
+  static const LOADING = '/';
+  static const WELCOME = 'welcome';
   static const LOGIN = 'login';
   static const HOME = 'home';
   static const SERIE = 'serie';

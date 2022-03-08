@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:watch_movie_app/src/core/constants/constants.dart';
 
 class BackgroundImage extends StatelessWidget {
   @override
@@ -6,7 +7,7 @@ class BackgroundImage extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/the-witcher-mobile-2.jpeg"),
+          image: AssetImage(backgroundImage),
           fit: BoxFit.cover,
         ),
       ),
