@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 
 /** Pages */
 import 'package:watch_movie_app/src/ui/pages/login/login_page.dart';
@@ -17,29 +18,24 @@ class LoadingPage extends ConsumerWidget {
       body: FutureBuilder(
         future: checkLoginState(context, ref),
         builder: (context, snapshot) {
-          return Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              image: DecorationImage(
-                  image:
-                      AssetImage("assets/images/undraw_our_neighborhood.png"),
-                  alignment: Alignment(1, 1)
-                  //fit: BoxFit.contain,
-                  ),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 20),
-                  Text(
-                    'Cargando...',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  )
-                ],
+          return Stack(
+            children: [
+              BackgroundImage(),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(),
+                    SizedBox(height: 20),
+                    Text(
+                      'Cargando...',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    )
+                  ],
+                ),
               ),
-            ),
+            ],
           );
         },
       ),
