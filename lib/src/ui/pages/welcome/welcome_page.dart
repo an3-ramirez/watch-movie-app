@@ -3,7 +3,7 @@ import 'package:watch_movie_app/src/routes/routes.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
 
-import 'package:watch_movie_app/src/core/constants/constants.dart';
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);

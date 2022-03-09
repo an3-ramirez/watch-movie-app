@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 
 /** Pages */
-import 'package:watch_movie_app/src/ui/pages/home/home_page.dart';
+import 'package:watch_movie_app/src/ui/pages/root_page.dart';
+import 'package:watch_movie_app/src/ui/pages/welcome/welcome_page.dart';
 
 /** providers */
-import 'package:watch_movie_app/src/data/providers/auth_provider.dart';
-import 'package:watch_movie_app/src/ui/pages/welcome/welcome_page.dart';
+import 'package:watch_movie_app/src/domain/providers/auth_provider.dart';
 
 class LoadingPage extends ConsumerWidget {
   const LoadingPage({Key? key}) : super(key: key);
@@ -55,7 +55,7 @@ class LoadingPage extends ConsumerWidget {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => HomePage(),
+          pageBuilder: (_, __, ___) => RootPage(),
           transitionDuration: const Duration(milliseconds: 0),
         ),
       );

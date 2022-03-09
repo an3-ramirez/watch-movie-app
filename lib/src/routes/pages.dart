@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:watch_movie_app/src/routes/routes.dart';
 
 /** Pages */
+import 'package:watch_movie_app/src/ui/pages/root_page.dart';
 import 'package:watch_movie_app/src/ui/pages/home/home_page.dart';
 import 'package:watch_movie_app/src/ui/pages/loader/loading_page.dart';
 import 'package:watch_movie_app/src/ui/pages/login/login_page.dart';
@@ -19,6 +20,7 @@ abstract class Pages {
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     Routes.LOADING: (_) => LoadingPage(),
+    Routes.ROOT: (_) => RootPage(),
     Routes.WELCOME: (_) => WelcomePage(),
     Routes.LOGIN: (_) => LoginPage(),
     Routes.HOME: (_) => HomePage(),

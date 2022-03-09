@@ -5,7 +5,7 @@ import 'package:watch_movie_app/src/ui/global_widgets/custom_input.dart';
 
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
 import 'package:watch_movie_app/src/utils/responsive.dart';
-import 'package:watch_movie_app/src/core/constants/constants.dart';
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -79,7 +79,7 @@ class LoginPage extends StatelessWidget {
             onPressed: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                Routes.HOME,
+                Routes.ROOT,
                 (_) => false,
               );
             },

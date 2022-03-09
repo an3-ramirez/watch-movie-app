@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /** Services */
-import 'package:watch_movie_app/src/data/services/movie_service.dart';
+import 'package:watch_movie_app/src/domain/services/movie_service.dart';
 
 /** Models */
 import 'package:watch_movie_app/src/data/models/movie.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'core/constants/constants.dart' show appName;
-import 'package:watch_movie_app/src/core/theme/theme.dart';
+import 'domain/constants/constants.dart' show appName;
+import 'domain/theme/theme.dart';
 
 import 'package:watch_movie_app/src/routes/pages.dart';
 

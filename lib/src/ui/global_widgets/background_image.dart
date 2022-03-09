@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:watch_movie_app/src/core/constants/constants.dart';
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
 
 class BackgroundImage extends StatelessWidget {
   const BackgroundImage({Key? key}) : super(key: key);

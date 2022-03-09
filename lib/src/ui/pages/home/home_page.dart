@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /** Providers */
-import 'package:watch_movie_app/src/data/providers/movie_provider.dart';
+import 'package:watch_movie_app/src/domain/providers/movie_provider.dart';
 
 /** Widgets */
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
@@ -12,9 +12,11 @@ import 'package:watch_movie_app/src/ui/global_widgets/star_rating.dart';
 import 'package:watch_movie_app/src/data/models/movie.dart';
 
 import 'package:watch_movie_app/src/utils/utils.dart';
-import 'package:watch_movie_app/src/core/constants/constants.dart';
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
 
 class HomePage extends ConsumerWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Responsive responsive = Responsive(context);
@@ -159,7 +161,7 @@ class HomePage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _subTitle(movie.name, 200),
+              _subTitle(movie.name, 180),
               StarRating(
                 rating: movie.score,
                 color: Colors.white54,
@@ -174,8 +176,8 @@ class HomePage extends ConsumerWidget {
               Row(
                 children: [
                   SizedBox(
-                    height: 65,
-                    width: responsive.wp(39),
+                    height: 55,
+                    width: responsive.wp(35),
                     //color: Colors.amber,
                     child: const RoundButton(
                       textBtn: 'Watch Now',
@@ -190,7 +192,7 @@ class HomePage extends ConsumerWidget {
                     child: const Icon(
                       Icons.favorite_border_outlined,
                       color: Colors.white54,
-                      size: 40,
+                      size: 35,
                     ),
                   )
                 ],
@@ -223,7 +225,7 @@ class HomePage extends ConsumerWidget {
       width: width,
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white, fontSize: 20),
+        style: const TextStyle(color: Colors.white, fontSize: 18),
       ),
     );
   }

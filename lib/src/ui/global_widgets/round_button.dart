@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:watch_movie_app/src/core/constants/app_constants.dart';
+import 'package:watch_movie_app/src/domain/constants/app_constants.dart';
 
 class RoundButton extends StatelessWidget {
   final String textBtn;
@@ -34,7 +34,7 @@ class RoundButton extends StatelessWidget {
               textBtn,
               style: TextStyle(
                 color: primaryColor,
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: fontWeight,
               ),
             ),
