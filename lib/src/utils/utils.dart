@@ -1,10 +1,3 @@
-import 'package:flutter/material.dart';
+library utils;
 
-// for displaying snackbars
-showSnackBar(BuildContext context, String text) {
-  return ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(text),
-    ),
-  );
-}
+export 'responsive.dart';

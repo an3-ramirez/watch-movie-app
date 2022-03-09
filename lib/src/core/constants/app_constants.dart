@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 const appName = 'Watch Movie App';
-const primaryColor = Color(0xFFEFF3F4);
-const accentColor = Color(0xFF2C48B8);
+const primaryColor = Color(0xff191919);
+const lightColor = Color(0xff8AFFFF);
+const accentColor = Color(0xffFFD233);
 final optionTextColor = primaryColor.withOpacity(0.7);
 const uiOverlayStyle = SystemUiOverlayStyle(
   statusBarIconBrightness: Brightness.dark,

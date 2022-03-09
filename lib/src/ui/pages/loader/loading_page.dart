@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 
 /** Pages */
-import 'package:watch_movie_app/src/ui/pages/login/login_page.dart';
 import 'package:watch_movie_app/src/ui/pages/home/home_page.dart';
 
 /** providers */
 import 'package:watch_movie_app/src/data/providers/auth_provider.dart';
+import 'package:watch_movie_app/src/ui/pages/welcome/welcome_page.dart';
 
 class LoadingPage extends ConsumerWidget {
-  LoadingPage({Key? key}) : super(key: key);
+  const LoadingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,7 +20,7 @@ class LoadingPage extends ConsumerWidget {
         builder: (context, snapshot) {
           return Stack(
             children: [
-              BackgroundImage(),
+              const BackgroundImage(),
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -46,11 +46,11 @@ class LoadingPage extends ConsumerWidget {
   }
 
   Future checkLoginState(BuildContext context, WidgetRef ref) async {
-    //final isLogin = ref.watch(authProvider);
+    final isLogin = ref.watch(authProvider);
     //final socketService = Provider.of<SocketService>(context, listen: false);
 
-    final isLogin = true;
-    await Future.delayed(const Duration(seconds: 2));
+    //final isLogin = true;
+    //await Future.delayed(const Duration(seconds: 2));
     if (isLogin) {
       Navigator.pushReplacement(
         context,
@@ -65,7 +65,7 @@ class LoadingPage extends ConsumerWidget {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (_, __, ___) => LoginPage(),
+            pageBuilder: (_, __, ___) => const WelcomePage(),
             transitionDuration: const Duration(milliseconds: 0),
           ),
         );
