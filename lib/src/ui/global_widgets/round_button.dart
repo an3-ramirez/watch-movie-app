@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-/** Utils */
-import 'package:watch_movie_app/src/utils/custom_colors.dart';
+import 'package:watch_movie_app/src/core/constants/app_constants.dart';
 
 class RoundButton extends StatelessWidget {
   final String textBtn;
@@ -14,7 +12,7 @@ class RoundButton extends StatelessWidget {
   const RoundButton({
     Key? key,
     required this.textBtn,
-    this.color = CustomColors.yellow,
+    this.color = accentColor,
     this.paddingHorizontal = 20.0,
     this.paddingVertical = 0,
     this.fontWeight = FontWeight.w600,
@@ -35,7 +33,7 @@ class RoundButton extends StatelessWidget {
             child: Text(
               textBtn,
               style: TextStyle(
-                color: CustomColors.black,
+                color: primaryColor,
                 fontSize: 22,
                 fontWeight: fontWeight,
               ),

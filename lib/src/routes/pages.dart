@@ -10,7 +10,7 @@ import 'package:watch_movie_app/src/ui/pages/recent_page.dart';
 import 'package:watch_movie_app/src/ui/pages/recent_detail_page.dart';
 import 'package:watch_movie_app/src/ui/pages/serie_detail_page.dart';
 import 'package:watch_movie_app/src/ui/pages/serie_page.dart';
-import 'package:watch_movie_app/src/ui/pages/welcome_page.dart';
+import 'package:watch_movie_app/src/ui/pages/welcome/welcome_page.dart';
 import 'package:watch_movie_app/src/ui/pages/favorite_page.dart';
 
 abstract class Pages {
@@ -18,7 +18,7 @@ abstract class Pages {
   static const String HOME = Routes.HOME;
 
   static final Map<String, Widget Function(BuildContext)> routes = {
-    Routes.LOADING: (_) => const LoadingPage(),
+    Routes.LOADING: (_) => LoadingPage(),
     Routes.WELCOME: (_) => WelcomePage(),
     Routes.LOGIN: (_) => LoginPage(),
     Routes.HOME: (_) => HomePage(),

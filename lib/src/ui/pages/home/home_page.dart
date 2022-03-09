@@ -11,10 +11,8 @@ import 'package:watch_movie_app/src/ui/global_widgets/star_rating.dart';
 /** Models */
 import 'package:watch_movie_app/src/data/models/movie.dart';
 
-/** Utils */
-import 'package:watch_movie_app/src/utils/custom_colors.dart';
-import 'package:watch_movie_app/src/utils/custom_styles.dart';
-import 'package:watch_movie_app/src/utils/responsive.dart';
+import 'package:watch_movie_app/src/utils/utils.dart';
+import 'package:watch_movie_app/src/core/constants/constants.dart';
 
 class HomePage extends ConsumerWidget {
   @override
@@ -24,7 +22,6 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
-        centerTitle: true,
         actions: <Widget>[
           Container(
             margin: const EdgeInsets.only(right: 10),
@@ -41,7 +38,7 @@ class HomePage extends ConsumerWidget {
         padding: const EdgeInsets.only(left: 15),
         height: responsive.height,
         width: responsive.width,
-        decoration: const BoxDecoration(color: CustomColors.black),
+        decoration: const BoxDecoration(color: primaryColor),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -80,7 +77,7 @@ class HomePage extends ConsumerWidget {
                     'See All >',
                     style: TextStyle(
                       fontSize: 22,
-                      color: CustomColors.yellow,
+                      color: accentColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -124,7 +121,7 @@ class HomePage extends ConsumerWidget {
       margin: const EdgeInsets.symmetric(vertical: 15),
       child: Text(
         text,
-        style: CustomStyles.textWhite.copyWith(fontSize: 24),
+        style: textWhite.copyWith(fontSize: 24),
       ),
     );
   }

@@ -4,8 +4,8 @@ import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/custom_input.dart';
 
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
-import 'package:watch_movie_app/src/utils/custom_styles.dart';
 import 'package:watch_movie_app/src/utils/responsive.dart';
+import 'package:watch_movie_app/src/core/constants/constants.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
     return SafeArea(
       child: Stack(
         children: [
-          BackgroundImage(),
+          const BackgroundImage(),
           Scaffold(
             backgroundColor: Colors.transparent,
             body: SingleChildScrollView(
@@ -29,7 +29,7 @@ class LoginPage extends StatelessWidget {
                       padding: EdgeInsets.only(top: 50),
                       child: Text(
                         'Welcome!',
-                        style: CustomStyles.textWhite,
+                        style: textWhite,
                       ),
                     ),
                     _formLogin(context)
@@ -60,11 +60,14 @@ class LoginPage extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          const Align(
+          Align(
             alignment: Alignment.topRight,
-            child: Icon(
-              Icons.close,
-              color: Colors.white54,
+            child: InkWell(
+              onTap: () => Navigator.pushNamed(context, Routes.WELCOME),
+              child: const Icon(
+                Icons.close,
+                color: Colors.white54,
+              ),
             ),
           ),
           CustomInput(placeholder: 'Name', textController: nameCtrl),
@@ -74,7 +77,11 @@ class LoginPage extends StatelessWidget {
             textBtn: 'Log in',
             color: Colors.white,
             onPressed: () {
-              Navigator.pushNamed(context, Routes.HOME);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                Routes.HOME,
+                (_) => false,
+              );
             },
           )
         ],

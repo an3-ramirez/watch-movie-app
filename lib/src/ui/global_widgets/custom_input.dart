@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:watch_movie_app/src/utils/custom_styles.dart';
-
 class CustomInput extends StatelessWidget {
   final String placeholder;
   final TextEditingController textController;
@@ -22,6 +20,8 @@ class CustomInput extends StatelessWidget {
       padding: const EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 20),
       margin: const EdgeInsets.only(bottom: 40),
       child: TextFormField(
+        cursorColor: Colors.white,
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           hintText: placeholder,
           hintStyle: const TextStyle(

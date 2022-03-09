@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 
 /** Pages */
-import 'package:watch_movie_app/src/ui/pages/login/login_page.dart';
 import 'package:watch_movie_app/src/ui/pages/home/home_page.dart';
 
 /** providers */
 import 'package:watch_movie_app/src/data/providers/auth_provider.dart';
+import 'package:watch_movie_app/src/ui/pages/welcome/welcome_page.dart';
 
 class LoadingPage extends ConsumerWidget {
   const LoadingPage({Key? key}) : super(key: key);
@@ -17,29 +18,27 @@ class LoadingPage extends ConsumerWidget {
       body: FutureBuilder(
         future: checkLoginState(context, ref),
         builder: (context, snapshot) {
-          return Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              image: DecorationImage(
-                  image:
-                      AssetImage("assets/images/undraw_our_neighborhood.png"),
-                  alignment: Alignment(1, 1)
-                  //fit: BoxFit.contain,
-                  ),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 20),
-                  Text(
-                    'Cargando...',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  )
-                ],
+          return Stack(
+            children: [
+              const BackgroundImage(),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(color: Colors.white),
+                    SizedBox(height: 20),
+                    Text(
+                      'Cargando...',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
+            ],
           );
         },
       ),
@@ -50,7 +49,8 @@ class LoadingPage extends ConsumerWidget {
     final isLogin = ref.watch(authProvider);
     //final socketService = Provider.of<SocketService>(context, listen: false);
 
-    //final autenticado = false;
+    //final isLogin = true;
+    //await Future.delayed(const Duration(seconds: 2));
     if (isLogin) {
       Navigator.pushReplacement(
         context,
@@ -65,7 +65,7 @@ class LoadingPage extends ConsumerWidget {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (_, __, ___) => LoginPage(),
+            pageBuilder: (_, __, ___) => const WelcomePage(),
             transitionDuration: const Duration(milliseconds: 0),
           ),
         );
