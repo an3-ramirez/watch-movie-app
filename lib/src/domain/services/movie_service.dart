@@ -25,7 +25,7 @@ class MovieService {
           .map((movieData) => Movie.fromMap(movieData))
           .toList(growable: false);
       return movies;
-    } on DioError catch (dioError) {
+    } on DioError {
       throw 'Error al consultar la información';
     }
   }
@@ -41,7 +41,7 @@ class MovieService {
           .map((movieData) => Movie.fromMap(movieData))
           .toList(growable: false);
       return movies;
-    } on DioError catch (dioError) {
+    } on DioError {
       throw 'Error al consultar los recomendados';
     }
   }

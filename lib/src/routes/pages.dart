@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:watch_movie_app/src/routes/routes.dart';
@@ -19,11 +21,11 @@ abstract class Pages {
   static const String HOME = Routes.HOME;
 
   static final Map<String, Widget Function(BuildContext)> routes = {
-    Routes.LOADING: (_) => LoadingPage(),
-    Routes.ROOT: (_) => RootPage(),
-    Routes.WELCOME: (_) => WelcomePage(),
+    Routes.LOADING: (_) => const LoadingPage(),
+    Routes.ROOT: (_) => const RootPage(),
+    Routes.WELCOME: (_) => const WelcomePage(),
     Routes.LOGIN: (_) => LoginPage(),
-    Routes.HOME: (_) => HomePage(),
+    Routes.HOME: (_) => const HomePage(),
     Routes.SERIE: (_) => SeriePage(),
     Routes.SERIE_DETAIL: (_) => SerieDetailPage(),
     Routes.RECENT: (_) => RecentPage(),
