@@ -1,16 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:watch_movie_app/src/data/models/models.dart';
+import 'package:watch_movie_app/src/domain/models/models.dart';
+import 'package:watch_movie_app/src/domain/services/authentication_service.dart';
 import 'package:watch_movie_app/src/routes/routes.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/custom_input.dart';
 
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
+import 'package:watch_movie_app/src/ui/pages/login/login_state.dart';
+import 'package:watch_movie_app/src/utils/alerts.dart';
 import 'package:watch_movie_app/src/utils/responsive.dart';
 import 'package:watch_movie_app/src/domain/constants/constants.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerStatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends ConsumerState<LoginPage> {
+  final nameCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     Responsive responsive = Responsive(context);
+    final loginStateNotifier = ref.watch(loginStateProvider);
 
     return SafeArea(
       child: Stack(
@@ -44,9 +60,6 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _formLogin(context) {
-    final nameCtrl = TextEditingController();
-    final passCtrl = TextEditingController();
-
     return Container(
       height: 420,
       width: double.infinity,
@@ -74,18 +87,29 @@ class LoginPage extends StatelessWidget {
           CustomInput(placeholder: 'Password', textController: passCtrl),
           const SizedBox(height: 40),
           RoundButton(
-            textBtn: 'Log in',
+            textBtn: loading ? 'Loading...' : 'Log in',
             color: Colors.white,
-            onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                Routes.ROOT,
-                (_) => false,
-              );
-            },
-          )
+            onPressed: loading ? null : () => onLogin(),
+          ),
         ],
       ),
     );
+  }
+
+  void onLogin() async {
+    FocusScope.of(context).unfocus();
+    User user =
+        User(name: nameCtrl.text.trim(), password: passCtrl.text.trim());
+    Auth auth = await ref.read(authRepositoryProvider).login(user);
+
+    if (auth.status) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        Routes.ROOT,
+        (_) => false,
+      );
+    } else {
+      showSnackBar(context, 'credenciales incorrectas');
+    }
   }
 }

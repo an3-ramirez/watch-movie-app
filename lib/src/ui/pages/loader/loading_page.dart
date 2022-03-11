@@ -7,8 +7,6 @@ import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 import 'package:watch_movie_app/src/ui/pages/root_page.dart';
 import 'package:watch_movie_app/src/ui/pages/welcome/welcome_page.dart';
 
-/** providers */
-
 class LoadingPage extends ConsumerWidget {
   const LoadingPage({Key? key}) : super(key: key);
 
@@ -49,9 +47,8 @@ class LoadingPage extends ConsumerWidget {
     final userToken = ref.watch(userTokenProvider);
 
     //final userToken = true;
-    //await Future.delayed(const Duration(seconds: 2));
-    print(userToken == '');
-    if (userToken != '') {
+    await Future.delayed(const Duration(seconds: 2));
+    if (userToken == '') {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(

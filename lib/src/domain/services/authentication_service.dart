@@ -1,25 +1,30 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:watch_movie_app/src/data/data_source/local/fake_data.dart';
 import 'package:watch_movie_app/src/data/models/models.dart';
+import 'package:watch_movie_app/src/domain/models/models.dart';
 
 class AuthenticationService {
-  Future<bool> login(String name, String password) async {
+  Future<Auth> login(User user) async {
     await Future.delayed(const Duration(seconds: 2));
     User isName = fakeUsers.firstWhere(
-      (element) => element.name == name,
+      (element) => element.name == user.name,
       orElse: () => emptyUser(),
     );
     User isPassword = fakeUsers.firstWhere(
-      (element) => element.password == password,
+      (element) => element.password == user.password,
       orElse: () => emptyUser(),
     );
     if (isName.name != '' && isPassword.password != '') {
-      return true;
+      return Auth(
+        message: 'Succes welcome user',
+        status: true,
+        aditionalData: getRandomString(15),
+      );
     }
-    return false;
+    return Auth(message: 'Credenciales incorrectas', status: false);
   }
 }
 
-final authenticationServiceProvider = Provider<AuthenticationService>((ref) {
+final authRepositoryProvider = Provider<AuthenticationService>((ref) {
   return AuthenticationService();
 });

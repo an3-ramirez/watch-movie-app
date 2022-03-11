@@ -3,13 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /** Providers */
 import 'package:watch_movie_app/src/domain/providers/movie_provider.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/card_image.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/card_movie_list.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/custom_app_bar.dart';
 
 /** Widgets */
-import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/star_rating.dart';
 
 /** Models */
 import 'package:watch_movie_app/src/data/models/movie.dart';
+import 'package:watch_movie_app/src/ui/pages/fovorite/favorite_state_notifier.dart';
 
 import 'package:watch_movie_app/src/utils/utils.dart';
 import 'package:watch_movie_app/src/domain/constants/constants.dart';
@@ -20,22 +23,10 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Responsive responsive = Responsive(context);
+    final List<Movie> favoriteMovies = ref.watch(favoriteNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(right: 10),
-            child: InkWell(
-              onTap: () {
-                print('logut user');
-              },
-              child: const Icon(Icons.settings, color: Colors.white54),
-            ),
-          )
-        ],
-      ),
+      appBar: const CustomAppBar(title: 'Home'),
       body: Container(
         padding: const EdgeInsets.only(left: 15),
         height: responsive.height,
@@ -46,7 +37,11 @@ class HomePage extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _title('Popular'),
+              Text(
+                'Popular',
+                style: textWhite.copyWith(fontSize: 24),
+              ),
+              const SizedBox(height: 20),
               ref.watch(moviesFutureProvider).when(
                     error: (e, s) {
                       return const Text("error");
@@ -89,7 +84,11 @@ class HomePage extends ConsumerWidget {
                 padding: EdgeInsets.only(right: 15),
                 child: Divider(color: Colors.white70),
               ),
-              _title('Recommendations'),
+              Text(
+                'Recommendations',
+                style: textWhite.copyWith(fontSize: 24),
+              ),
+              const SizedBox(height: 20),
               ref.watch(moviesRecomendedFutureProvider).when(
                     error: (e, s) {
                       return const Text("error");
@@ -104,9 +103,14 @@ class HomePage extends ConsumerWidget {
                       child: ListView.builder(
                         physics: const ClampingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 5,
+                        itemCount: movies.length,
                         itemBuilder: (_, i) {
-                          return _carMovieVertical(_, movies[i]);
+                          return CardMovieList(
+                            movie: movies[i],
+                            onFavorite: () => onFavoriteMovie(ref, movies[i]),
+                            isFavorite:
+                                isFavorite(ref, movies[i], favoriteMovies),
+                          );
                         },
                       ),
                     ),
@@ -118,24 +122,20 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _title(String text) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      child: Text(
-        text,
-        style: textWhite.copyWith(fontSize: 24),
-      ),
-    );
-  }
-
   Widget _carMovie(context, Movie movie) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _imageCard(movie.fullImageUrl),
+        Flexible(flex: 3, child: CardImage(imageUrl: movie.fullImageUrl)),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          width: 130,
+          child: Text(
+            movie.name,
+            style: const TextStyle(color: Colors.white, fontSize: 18),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-        _subTitle(movie.name, 150),
         StarRating(
           rating: movie.score,
           color: Colors.white54,
@@ -146,87 +146,16 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _carMovieVertical(context, Movie movie) {
-    Responsive responsive = Responsive(context);
-
-    return Row(
-      //crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 25),
-          child: _imageCard(movie.fullImageUrl),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _subTitle(movie.name, 180),
-              StarRating(
-                rating: movie.score,
-                color: Colors.white54,
-                size: 15,
-                onRatingChanged: (rating) {},
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                'IMDb: 9,4',
-                style: TextStyle(color: Colors.white54),
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    height: 55,
-                    width: responsive.wp(35),
-                    //color: Colors.amber,
-                    child: const RoundButton(
-                      textBtn: 'Watch Now',
-                      fontWeight: FontWeight.normal,
-                      paddingHorizontal: 0,
-                      paddingVertical: 8,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  InkWell(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.favorite_border_outlined,
-                      color: Colors.white54,
-                      size: 35,
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        )
-      ],
-    );
+  bool isFavorite(WidgetRef ref, Movie movie, List<Movie> favorites) {
+    try {
+      favorites.firstWhere((element) => element.id == movie.id);
+      return true;
+    } on StateError {
+      return false;
+    }
   }
 
-  Container _imageCard(String url) {
-    return Container(
-      margin: const EdgeInsets.only(right: 23.0),
-      width: 150,
-      height: 170,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(url),
-          fit: BoxFit.cover,
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    );
-  }
-
-  Widget _subTitle(String text, double width) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      width: width,
-      child: Text(
-        text,
-        style: const TextStyle(color: Colors.white, fontSize: 18),
-      ),
-    );
+  void onFavoriteMovie(WidgetRef ref, Movie movie) {
+    ref.read(favoriteNotifierProvider.notifier).addOrRemove(movie);
   }
 }
