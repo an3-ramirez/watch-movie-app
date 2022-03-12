@@ -27,8 +27,12 @@ class CardMovieList extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          CardImage(imageUrl: movie.fullImageUrl),
-          Expanded(
+          CardImage(
+            imageUrl: movie.fullImageUrl,
+            heigth: 170,
+            width: responsive.wp(35),
+          ),
+          Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -41,12 +45,11 @@ class CardMovieList extends StatelessWidget {
                   rating: movie.score,
                   color: Colors.white54,
                   size: 15,
-                  onRatingChanged: (rating) {},
                 ),
                 const SizedBox(height: 15),
-                const Text(
-                  'IMDb: 9,4',
-                  style: TextStyle(color: Colors.white54),
+                Text(
+                  'IMDb: ${movie.voteAverage}',
+                  style: const TextStyle(color: Colors.white54),
                 ),
                 Row(
                   children: [

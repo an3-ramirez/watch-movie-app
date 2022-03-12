@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /** Providers */
 import 'package:watch_movie_app/src/domain/providers/movie_provider.dart';
+import 'package:watch_movie_app/src/routes/routes.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/card_image.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/card_movie_list.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/custom_app_bar.dart';
@@ -57,25 +58,28 @@ class HomePage extends ConsumerWidget {
                       child: ListView.builder(
                         physics: const ClampingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: movies.length,
+                        itemCount: movies.length > 10 ? 10 : movies.length,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (_, i) {
-                          return _carMovie(_, movies[i]);
+                          return _carMovie(_, ref, movies[i]);
                         },
                       ),
                     ),
                   ),
               const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.only(right: 30),
+              Padding(
+                padding: const EdgeInsets.only(right: 30),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    'See All >',
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: accentColor,
-                      fontWeight: FontWeight.bold,
+                  child: InkWell(
+                    onTap: () => Navigator.pushNamed(context, Routes.SERIE),
+                    child: const Text(
+                      'See All >',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: accentColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -110,6 +114,8 @@ class HomePage extends ConsumerWidget {
                             onFavorite: () => onFavoriteMovie(ref, movies[i]),
                             isFavorite:
                                 isFavorite(ref, movies[i], favoriteMovies),
+                            onWatchNow: () =>
+                                navigateDetailPage(context, ref, movies[i]),
                           );
                         },
                       ),
@@ -122,11 +128,19 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _carMovie(context, Movie movie) {
+  Widget _carMovie(BuildContext context, WidgetRef ref, Movie movie) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Flexible(flex: 3, child: CardImage(imageUrl: movie.fullImageUrl)),
+        Flexible(
+          flex: 3,
+          child: CardImage(
+            onPress: () => navigateDetailPage(context, ref, movie),
+            imageUrl: movie.fullImageUrl,
+            heigth: 200,
+            width: 150,
+          ),
+        ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
           width: 130,
@@ -157,5 +171,10 @@ class HomePage extends ConsumerWidget {
 
   void onFavoriteMovie(WidgetRef ref, Movie movie) {
     ref.read(favoriteNotifierProvider.notifier).addOrRemove(movie);
+  }
+
+  void navigateDetailPage(BuildContext context, WidgetRef ref, Movie movie) {
+    ref.read(movieIdSelectProvider.state).state = movie.id;
+    Navigator.pushNamed(context, Routes.SERIE_DETAIL);
   }
 }

@@ -10,3 +10,5 @@ const uiOverlayStyle = SystemUiOverlayStyle(
   statusBarIconBrightness: Brightness.dark,
   statusBarColor: Colors.transparent,
 );
+
+const String domainImageNetwork = 'https://image.tmdb.org/t/p/';

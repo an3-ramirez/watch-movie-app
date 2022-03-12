@@ -13,9 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         Container(
           margin: const EdgeInsets.only(right: 10),
           child: InkWell(
-            onTap: () {
-              print('logut user');
-            },
+            onTap: () {},
             child: const Icon(Icons.settings, color: Colors.white54),
           ),
         )

@@ -6,12 +6,17 @@ import '../constants/constants.dart';
 
 ThemeData channelTheme = ThemeData(
   fontFamily: 'Gilroy',
-  primarySwatch: Palette.getMaterialColorFromColor(primaryColor),
+  primarySwatch: Palette.getMaterialColorFromColor(lightColor),
+  primaryTextTheme: const TextTheme(headline6: TextStyle(color: lightColor)),
+  textTheme: const TextTheme(
+    bodyText2: TextStyle(color: lightColor),
+  ),
   appBarTheme: const AppBarTheme(
-    color: primaryColor,
+    backgroundColor: primaryColor,
+    foregroundColor: lightColor,
     centerTitle: true,
     elevation: 0,
-    toolbarHeight: 65,
+    toolbarHeight: kToolbarHeight,
     systemOverlayStyle: uiOverlayStyle,
   ),
   scaffoldBackgroundColor: primaryColor,

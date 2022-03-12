@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 List<Movie> allMoviesFromJson(String str) {
-  final jsonData = json.decode(str);
+  final jsonData = json.decode(str)['results'];
   return List<Movie>.from(jsonData.map((x) => Movie.fromMap(x)));
 }
 

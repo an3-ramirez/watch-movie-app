@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:watch_movie_app/src/domain/services/movie_service.dart';
 
 /** Models */
-import 'package:watch_movie_app/src/data/models/movie.dart';
+import 'package:watch_movie_app/src/data/models/models.dart';
 
 final moviesFutureProvider =
     FutureProvider.autoDispose<List<Movie>>((ref) async {
@@ -23,3 +23,14 @@ final moviesRecomendedFutureProvider =
   final movies = await movieService.getMoviesRecommendations();
   return movies;
 });
+
+final movieDetailProvider =
+    FutureProvider.family.autoDispose<MovieExtend, int>((ref, id) async {
+  ref.maintainState = true;
+
+  final movieService = ref.read(movieServiceProvider);
+  final movies = await movieService.getDetailMovie(id);
+  return movies;
+});
+
+final movieIdSelectProvider = StateProvider<int?>((ref) => null);
