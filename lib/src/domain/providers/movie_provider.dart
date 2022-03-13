@@ -33,4 +33,14 @@ final movieDetailProvider =
   return movies;
 });
 
+final todayMoviesFutureProvider =
+    FutureProvider.autoDispose<List<Movie>>((ref) async {
+  ref.maintainState = true;
+
+  final movieService = ref.read(movieServiceProvider);
+  final movies = await movieService.getAirtodayMovies();
+  return movies;
+});
+
 final movieIdSelectProvider = StateProvider<int?>((ref) => null);
+final airTodayMovieIdSelectProvider = StateProvider<int?>((ref) => null);

@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
+
 List<Movie> allMoviesFromJson(String str) {
   final jsonData = json.decode(str)['results'];
   return List<Movie>.from(jsonData.map((x) => Movie.fromMap(x)));
 }
 
 class Movie {
-  String? backdropPath;
+  String backdropPath;
   String firstAirDate,
       name,
       originalLanguage,
@@ -19,7 +21,7 @@ class Movie {
   List<int> genreIds;
 
   Movie({
-    this.backdropPath,
+    required this.backdropPath,
     required this.firstAirDate,
     required this.name,
     required this.originalLanguage,
@@ -34,7 +36,9 @@ class Movie {
     required this.genreIds,
   });
 
-  String get fullImageUrl => 'https://image.tmdb.org/t/p/w200/$posterPath';
+  String get fullImageUrl => posterPath != ''
+      ? 'https://image.tmdb.org/t/p/w200/$posterPath'
+      : emptyUrlImage;
   double get score => voteAverage / 2;
 
   factory Movie.fromMap(Map<String, dynamic> parsedJson) {
@@ -44,13 +48,15 @@ class Movie {
 
     return Movie(
       id: parsedJson['id'],
-      backdropPath: parsedJson['backdrop_path'],
+      backdropPath: parsedJson['backdrop_path'] != null
+          ? 'https://image.tmdb.org/t/p/w500/' + parsedJson['backdrop_path']
+          : emptyUrlImage,
       firstAirDate: parsedJson['first_air_date'],
       name: parsedJson['name'],
       originalLanguage: parsedJson['original_language'],
       originalName: parsedJson['original_name'],
       overview: parsedJson['overview'],
-      posterPath: parsedJson['poster_path'],
+      posterPath: parsedJson['poster_path'] ?? '',
       originCountry: originCountryList,
       popularity: parsedJson['popularity'].toDouble(),
       voteAverage: parsedJson['vote_average'].toDouble(),

@@ -75,4 +75,23 @@ class MovieService {
           'Error al consultar el detalle de la serie');
     }
   }
+
+  Future<List<Movie>> getAirtodayMovies() async {
+    try {
+      String url =
+          "${_environmentConfig.domainApi}/${_environmentConfig.apiVersion}/tv/airing_today?api_key=${_environmentConfig.movieApiKey}&language=en-US&page=1";
+
+      final Response response =
+          await _http.request(typeHttp: EnumHttpType.get, urlApi: url);
+
+      if (response.statusCode != 200) {
+        throw const MovieApiException(
+            'Error al consultar las series, intente nuevamente mas tarde');
+      }
+      List<Movie> movies = allMoviesFromJson(response.body);
+      return movies;
+    } on ClientException {
+      throw const MovieApiException('Error al consultar las series de hoy');
+    }
+  }
 }

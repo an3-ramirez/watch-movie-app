@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
+
 MovieExtend movieExtendFromJson(String str) {
   final jsonData = json.decode(str);
   return MovieExtend.fromJson(jsonData);
@@ -8,7 +10,7 @@ MovieExtend movieExtendFromJson(String str) {
 class MovieExtend {
   MovieExtend({
     required this.adult,
-    this.backdropPath,
+    required this.backdropPath,
     required this.createdBy,
     required this.episodeRunTime,
     required this.firstAirDate,
@@ -44,7 +46,7 @@ class MovieExtend {
   double get score => voteAverage / 2;
 
   late final bool adult;
-  late final String? backdropPath;
+  late final String backdropPath;
   late final List<CreatedBy> createdBy;
   late final List<int> episodeRunTime;
   late final String firstAirDate;
@@ -355,7 +357,7 @@ class Seasons {
     required this.id,
     required this.name,
     required this.overview,
-    this.posterPath,
+    required this.posterPath,
     required this.seasonNumber,
   });
   late final String airDate;
@@ -363,7 +365,7 @@ class Seasons {
   late final int id;
   late final String name;
   late final String overview;
-  late final String? posterPath;
+  late final String posterPath;
   late final int seasonNumber;
 
   Seasons.fromJson(Map<String, dynamic> json) {
@@ -372,7 +374,9 @@ class Seasons {
     id = json['id'];
     name = json['name'];
     overview = json['overview'];
-    posterPath = json['poster_path'] ?? '';
+    posterPath = json['poster_path'] != null
+        ? 'https://image.tmdb.org/t/p/w200/' + json['poster_path']
+        : emptyUrlImage;
     seasonNumber = json['season_number'];
   }
 

@@ -5,3 +5,5 @@ const TextStyle textWhite = TextStyle(
   fontWeight: FontWeight.w700,
   fontSize: 30,
 );
+
+const double defaultPaddingHorizontal = 20.0;

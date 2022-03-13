@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:watch_movie_app/src/data/models/models.dart';
 import 'package:watch_movie_app/src/domain/constants/constants.dart';
 import 'package:watch_movie_app/src/domain/providers/movie_provider.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/fake_video.dart';
 
 class SerieDetailPage extends ConsumerStatefulWidget {
   @override
@@ -18,7 +19,12 @@ class _SerieDetailPageState extends ConsumerState<SerieDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('serie'),
+        title: ref.watch(movieDetailProvider(movieIdSelect)).when(
+              data: (data) => Text(data.originalName),
+              error: (e, s) => const Text('error'),
+              loading: () =>
+                  const CircularProgressIndicator(color: Colors.white),
+            ),
         centerTitle: false,
         actions: <Widget>[
           Container(
@@ -37,14 +43,19 @@ class _SerieDetailPageState extends ConsumerState<SerieDetailPage> {
         width: double.infinity,
         child: SingleChildScrollView(
           child: ref.watch(movieDetailProvider(movieIdSelect)).when(
-                data: (movieDetail) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    topBar(movieDetail),
-                    fakeVideo(movieDetail),
-                    bodyDescription(movieDetail),
-                  ],
-                ),
+                data: (movieDetail) {
+                  String networkImage = movieDetail.backdropPath != ''
+                      ? domainImageNetwork + 'w500' + movieDetail.backdropPath
+                      : emptyUrlImage;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      topBar(movieDetail),
+                      FakeVideo(networkImage: networkImage),
+                      bodyDescription(movieDetail),
+                    ],
+                  );
+                },
                 error: (e, s) {
                   print(e.toString());
                   return const Text("error");
@@ -92,48 +103,13 @@ class _SerieDetailPageState extends ConsumerState<SerieDetailPage> {
             children: const [
               Text(
                 'Next',
-                style: TextStyle(color: lightColor, fontSize: 15),
+                style: TextStyle(fontSize: 15),
               ),
               Icon(Icons.navigate_next)
             ],
           ),
         )
       ],
-    );
-  }
-
-  Widget fakeVideo(MovieExtend movieDetail) {
-    String _backdropPath = movieDetail.backdropPath ?? '';
-
-    return SizedBox(
-      height: 200,
-      child: Stack(
-        children: [
-          _backdropPath != ''
-              ? Image(
-                  image:
-                      NetworkImage(domainImageNetwork + 'w500' + _backdropPath))
-              : const SizedBox(),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [iconPlay()],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget iconPlay() {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      decoration: const BoxDecoration(
-        color: accentColor,
-        shape: BoxShape.circle,
-      ),
-      child: const Icon(Icons.play_arrow),
     );
   }
 
