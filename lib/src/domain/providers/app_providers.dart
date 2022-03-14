@@ -11,3 +11,5 @@ final sharedPreferences = FutureProvider<SharedPreferences>(
 final localStoreProvider = Provider<LocalStore>(
   (ref) => LocalStore(ref.watch(sharedPreferences).value!),
 );
+
+//final checkUserIsLogeed = FutureProvider(_create)

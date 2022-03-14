@@ -1,26 +1,51 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:watch_movie_app/src/data/data_source/local/local.dart';
 import 'package:watch_movie_app/src/domain/enums/enum_login_status.dart';
 
 import 'package:watch_movie_app/src/data/models/models.dart';
+import 'package:watch_movie_app/src/domain/models/auth_repository.dart';
+import 'package:watch_movie_app/src/domain/models/models.dart';
 import 'package:watch_movie_app/src/domain/constants/constants.dart';
 import 'package:watch_movie_app/src/domain/providers/app_providers.dart';
+import 'package:watch_movie_app/src/domain/services/authentication_service.dart';
 
-class LoginStateCtrl extends ChangeNotifier {
-  final ChangeNotifierProviderRef<LoginStateCtrl> ref;
+class LoginStateNotifier extends StateNotifier<Auth> {
+  final Ref ref;
+  late LocalStore _localStore;
 
-  LoginStatus _status = LoginStatus.initialize;
+  LoginStateNotifier(this.ref) : super(Auth()) {
+    _localStore = ref.read(localStoreProvider);
+  }
 
-  LoginStateCtrl(this.ref);
+  Future<AuthRepository> login(User user) async {
+    state.status = LoginStatus.loading;
+    AuthRepository auth = await ref.read(authRepositoryProvider).login(user);
 
-  Future<void> login(User user) async {
-    _status = LoginStatus.loading;
+    if (auth.status) {
+      state.status = LoginStatus.success;
+      saveToken(auth.aditionalData);
+    } else {
+      state = Auth(status: LoginStatus.failed, message: auth.message);
+    }
+
+    return auth;
+  }
+
+  void logout() {
+    _localStore.dete(tokenKey);
   }
 
   void saveToken(String token) {
-    final localStore = ref.read(localStoreProvider);
-    localStore.write(tokenKey, token);
+    _localStore.write(tokenKey, token);
+  }
+
+  void checkUserLogged() {
+    final String token = _localStore.read(tokenKey);
+    if (token != '') {
+      state.status = LoginStatus.success;
+    }
   }
 }
 
-final loginStateProvider = ChangeNotifierProvider((ref) => LoginStateCtrl(ref));
+final StateNotifierProvider<LoginStateNotifier, Auth> loginStateProvider =
+    StateNotifierProvider((ref) => LoginStateNotifier(ref));

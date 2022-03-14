@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:watch_movie_app/src/data/models/models.dart';
+import 'package:watch_movie_app/src/domain/enums/enum_login_status.dart';
+import 'package:watch_movie_app/src/domain/models/auth_repository.dart';
 import 'package:watch_movie_app/src/domain/models/models.dart';
 import 'package:watch_movie_app/src/domain/services/authentication_service.dart';
 import 'package:watch_movie_app/src/routes/routes.dart';
@@ -26,7 +28,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     Responsive responsive = Responsive(context);
-    final loginStateNotifier = ref.watch(loginStateProvider);
+    final Auth loginState = ref.watch(loginStateProvider);
+    final bool loading = loginState.status == LoginStatus.loading;
 
     return SafeArea(
       child: Stack(
@@ -48,7 +51,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         style: textWhite,
                       ),
                     ),
-                    _formLogin(context)
+                    _formLogin(
+                      context,
+                      loading,
+                    )
                   ],
                 ),
               ),
@@ -59,7 +65,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  Widget _formLogin(context) {
+  Widget _formLogin(BuildContext context, bool loading) {
     return Container(
       height: 420,
       width: double.infinity,
@@ -84,7 +90,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
           ),
           CustomInput(placeholder: 'Name', textController: nameCtrl),
-          CustomInput(placeholder: 'Password', textController: passCtrl),
+          CustomInput(
+            placeholder: 'Password',
+            textController: passCtrl,
+            isPassword: true,
+          ),
           const SizedBox(height: 40),
           RoundButton(
             textBtn: loading ? 'Loading...' : 'Log in',
@@ -98,18 +108,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void onLogin() async {
     FocusScope.of(context).unfocus();
-    User user =
-        User(name: nameCtrl.text.trim(), password: passCtrl.text.trim());
-    Auth auth = await ref.read(authRepositoryProvider).login(user);
+    User user = User(
+      name: nameCtrl.text.trim(),
+      password: passCtrl.text.trim(),
+    );
+    AuthRepository authRepository =
+        await ref.read(loginStateProvider.notifier).login(user);
 
-    if (auth.status) {
+    if (authRepository.status) {
       Navigator.pushNamedAndRemoveUntil(
         context,
         Routes.ROOT,
         (_) => false,
       );
     } else {
-      showSnackBar(context, 'credenciales incorrectas');
+      showSnackBar(context, authRepository.message);
     }
   }
 }

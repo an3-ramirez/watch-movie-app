@@ -35,5 +35,5 @@ class FavoriteStateNotifier extends StateNotifier<List<Movie>> {
 }
 
 final StateNotifierProvider<FavoriteStateNotifier, List<Movie>>
-    favoriteNotifierProvider =
+    favoriteStateProvider =
     StateNotifierProvider((ref) => FavoriteStateNotifier());

@@ -46,9 +46,8 @@ class LoadingPage extends ConsumerWidget {
   Future checkLoginState(BuildContext context, WidgetRef ref) async {
     final userToken = ref.watch(userTokenProvider);
 
-    //final userToken = true;
-    await Future.delayed(const Duration(seconds: 2));
-    if (userToken == '') {
+    await Future.delayed(const Duration(seconds: 1));
+    if (userToken != '') {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
@@ -57,16 +56,14 @@ class LoadingPage extends ConsumerWidget {
         ),
       );
     } else {
-      Future.delayed(const Duration(seconds: 3), () {
-        // Here you can write your code
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => const WelcomePage(),
-            transitionDuration: const Duration(milliseconds: 0),
-          ),
-        );
-      });
+      // Here you can write your code
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const WelcomePage(),
+          transitionDuration: const Duration(milliseconds: 0),
+        ),
+      );
     }
   }
 }

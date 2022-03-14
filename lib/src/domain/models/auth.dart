@@ -1,6 +1,8 @@
-class Auth {
-  final String message, aditionalData;
-  bool status;
+import 'package:watch_movie_app/src/domain/enums/enum_login_status.dart';
 
-  Auth({this.message = '', this.status = false, this.aditionalData = ''});
+class Auth {
+  LoginStatus status;
+  String message;
+
+  Auth({this.message = '', this.status = LoginStatus.initialize});
 }

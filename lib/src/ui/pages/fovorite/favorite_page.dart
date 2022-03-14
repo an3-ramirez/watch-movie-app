@@ -8,7 +8,7 @@ import 'package:watch_movie_app/src/ui/pages/fovorite/favorite_state_notifier.da
 class FavoritePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final movies = ref.watch(favoriteNotifierProvider);
+    final movies = ref.watch(favoriteStateProvider);
 
     return Scaffold(
       appBar: const CustomAppBar(title: 'Favorites'),
@@ -30,6 +30,6 @@ class FavoritePage extends ConsumerWidget {
   }
 
   void removeFavorite(Movie movie, WidgetRef ref) {
-    ref.read(favoriteNotifierProvider.notifier).removeMovie(movie);
+    ref.read(favoriteStateProvider.notifier).removeMovie(movie);
   }
 }
