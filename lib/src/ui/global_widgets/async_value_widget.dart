@@ -18,7 +18,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
       loading: () => const Material(
         child: Center(
           child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.lightBlue),
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
           ),
         ),
       ),

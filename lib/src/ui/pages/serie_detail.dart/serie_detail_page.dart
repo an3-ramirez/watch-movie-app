@@ -16,15 +16,12 @@ class _SerieDetailPageState extends ConsumerState<SerieDetailPage> {
   @override
   Widget build(BuildContext context) {
     int movieIdSelect = ref.watch(movieIdSelectProvider.state).state ?? 0;
+    String title =
+        ref.watch(movieDetailProvider(movieIdSelect)).value?.originalName ?? '';
 
     return Scaffold(
       appBar: AppBar(
-        title: ref.watch(movieDetailProvider(movieIdSelect)).when(
-              data: (data) => Text(data.originalName),
-              error: (e, s) => const Text('error'),
-              loading: () =>
-                  const CircularProgressIndicator(color: Colors.white),
-            ),
+        title: Text(title),
         centerTitle: false,
         actions: <Widget>[
           Container(

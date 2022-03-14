@@ -10,15 +10,12 @@ class RecentDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     int movieIdSelect =
         ref.watch(airTodayMovieIdSelectProvider.state).state ?? 0;
+    String title =
+        ref.watch(movieDetailProvider(movieIdSelect)).value?.originalName ?? '';
 
     return Scaffold(
       appBar: AppBar(
-        title: ref.watch(movieDetailProvider(movieIdSelect)).when(
-              data: (data) => Text(data.originalName),
-              error: (e, s) => const Text('Error'),
-              loading: () =>
-                  const CircularProgressIndicator(color: Colors.white),
-            ),
+        title: Text(title),
         centerTitle: false,
       ),
       body: SafeArea(
