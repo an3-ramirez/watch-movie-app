@@ -13,7 +13,7 @@ class MovieApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncValue = ref.watch(userIsLogeed);
+    final asyncValue = ref.watch(userIsLoggedProvider);
 
     return AsyncValueWidget(
       value: asyncValue,

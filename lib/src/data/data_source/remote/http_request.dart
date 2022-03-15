@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:watch_movie_app/src/domain/enums/enums.dart';
@@ -31,3 +32,5 @@ class HttpRequest {
     }
   }
 }
+
+final httpClientProvider = Provider<HttpRequest>((ref) => HttpRequest());

@@ -18,7 +18,7 @@ import 'package:watch_movie_app/src/ui/pages/fovorite/favorite_page.dart';
 abstract class Pages {
   //static const String INITIAL = Routes.LOADING;
   static const String INITIAL = Routes.WELCOME;
-  static const String HOME = Routes.HOME;
+  static const String HOME = Routes.ROOT;
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     Routes.ROOT: (_) => const RootPage(),

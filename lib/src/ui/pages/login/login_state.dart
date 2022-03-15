@@ -12,14 +12,16 @@ import 'package:watch_movie_app/src/domain/services/authentication_service.dart'
 class LoginStateNotifier extends StateNotifier<Auth> {
   final Reader read;
   late LocalStore _localStore;
+  late AuthenticationService _authRepository;
 
   LoginStateNotifier(this.read) : super(Auth()) {
     _localStore = read(localStoreProvider);
+    _authRepository = read(authRepositoryProvider);
   }
 
   Future<AuthRepository> login(User user) async {
     state.status = LoginStatus.loading;
-    AuthRepository auth = await read(authRepositoryProvider).login(user);
+    AuthRepository auth = await _authRepository.login(user);
 
     if (auth.status) {
       state.status = LoginStatus.success;

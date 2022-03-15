@@ -10,8 +10,9 @@ class RecentDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     int movieIdSelect =
         ref.watch(airTodayMovieIdSelectProvider.state).state ?? 0;
-    String title =
-        ref.watch(movieDetailProvider(movieIdSelect)).value?.originalName ?? '';
+    String title = ref
+        .watch(movieDetailProvider(movieIdSelect))
+        .maybeWhen(data: (value) => value.originalName, orElse: () => '');
 
     return Scaffold(
       appBar: AppBar(
@@ -20,40 +21,41 @@ class RecentDetailPage extends ConsumerWidget {
       ),
       body: SafeArea(
         child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: defaultPaddingHorizontal,
-            ),
-            child: ref.watch(movieDetailProvider(movieIdSelect)).when(
-                  data: (movieDetail) => ListView.separated(
-                    itemBuilder: (context, i) {
-                      Seasons season = movieDetail.seasons[i];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 15),
-                          Text(
-                            '${season.seasonNumber + 1} Season',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: defaultPaddingHorizontal,
+          ),
+          child: ref.watch(movieDetailProvider(movieIdSelect)).when(
+                data: (movieDetail) => ListView.separated(
+                  itemBuilder: (context, i) {
+                    Seasons season = movieDetail.seasons[i];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 15),
+                        Text(
+                          '${season.seasonNumber + 1} Season',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
                           ),
-                          FakeVideo(networkImage: season.posterPath),
-                        ],
-                      );
-                    },
-                    separatorBuilder: (_, __) => const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
-                      child: Divider(color: lightColor),
-                    ),
-                    itemCount: movieDetail.seasons.length,
+                        ),
+                        FakeVideo(networkImage: season.posterPath),
+                      ],
+                    );
+                  },
+                  separatorBuilder: (_, __) => const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 40),
+                    child: Divider(color: lightColor),
                   ),
-                  error: (e, s) => const Text("error"),
-                  loading: () => const Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  ),
-                )),
+                  itemCount: movieDetail.seasons.length,
+                ),
+                error: (e, s) => const Text("error"),
+                loading: () => const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                ),
+              ),
+        ),
       ),
     );
   }

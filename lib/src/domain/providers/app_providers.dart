@@ -6,17 +6,17 @@ import 'package:watch_movie_app/src/domain/constants/constants.dart';
 // Maneja el estado de la tab active de la barra de navegacion inferior
 final activeTabBottomBarProvider = StateProvider.autoDispose<int>((_) => 0);
 
-final sharedPreferences = FutureProvider<SharedPreferences>(
+final sharedPreferencesProvider = FutureProvider<SharedPreferences>(
   (_) async => await SharedPreferences.getInstance(),
 );
 
 final localStoreProvider = Provider<LocalStore>(
-  (ref) => LocalStore(ref.watch(sharedPreferences).value!),
+  (ref) => LocalStore(ref.watch(sharedPreferencesProvider).value!),
 );
 
 // Verifica si existe un token para hacer el login
-final userIsLogeed = FutureProvider<bool>((ref) async {
-  await ref.watch(sharedPreferences.future);
+final userIsLoggedProvider = FutureProvider<bool>((ref) async {
+  await ref.watch(sharedPreferencesProvider.future);
   final localStore = ref.watch(localStoreProvider);
   return localStore.read(tokenKey) != '';
 });

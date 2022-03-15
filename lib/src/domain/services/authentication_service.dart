@@ -25,6 +25,6 @@ class AuthenticationService {
   }
 }
 
-final authRepositoryProvider = Provider<AuthenticationService>((ref) {
-  return AuthenticationService();
-});
+final authRepositoryProvider = Provider<AuthenticationService>(
+  (ref) => AuthenticationService(),
+);

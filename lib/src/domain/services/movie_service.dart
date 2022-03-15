@@ -8,7 +8,8 @@ import 'package:watch_movie_app/src/helpers/movie_api_exception.dart';
 
 final movieServiceProvider = Provider<MovieService>((ref) {
   final config = ref.read(environmentConfigProvider);
-  return MovieService(config, HttpRequest());
+  final httpRequest = ref.read(httpClientProvider);
+  return MovieService(config, httpRequest);
 });
 
 class MovieService {

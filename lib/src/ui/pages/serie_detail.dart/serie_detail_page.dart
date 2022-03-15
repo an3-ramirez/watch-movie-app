@@ -54,7 +54,6 @@ class _SerieDetailPageState extends ConsumerState<SerieDetailPage> {
                   );
                 },
                 error: (e, s) {
-                  print(e.toString());
                   return const Text("error");
                 },
                 loading: () => const Center(

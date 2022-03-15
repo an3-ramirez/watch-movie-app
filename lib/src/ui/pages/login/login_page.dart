@@ -4,7 +4,6 @@ import 'package:watch_movie_app/src/data/models/models.dart';
 import 'package:watch_movie_app/src/domain/enums/enum_login_status.dart';
 import 'package:watch_movie_app/src/domain/models/auth_repository.dart';
 import 'package:watch_movie_app/src/domain/models/models.dart';
-import 'package:watch_movie_app/src/domain/services/authentication_service.dart';
 import 'package:watch_movie_app/src/routes/routes.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/custom_input.dart';
@@ -23,7 +22,6 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final nameCtrl = TextEditingController();
   final passCtrl = TextEditingController();
-  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
