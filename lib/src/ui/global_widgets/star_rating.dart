@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 
-typedef void RatingChangeCallback(double rating);
+//typedef void RatingChangeCallback(double rating);
+typedef RatingChangeCallback = void Function(double rating);
 
 class StarRating extends StatelessWidget {
   final int starCount;
   final double rating;
-  final RatingChangeCallback onRatingChanged;
+  final RatingChangeCallback? onRatingChanged;
   final Color? color;
   final double size;
+  final MainAxisAlignment alignment;
 
-  const StarRating({
-    Key? key,
-    this.starCount = 5,
-    this.rating = .0,
-    required this.onRatingChanged,
-    this.color,
-    this.size = 25,
-  }) : super(key: key);
+  const StarRating(
+      {Key? key,
+      this.starCount = 5,
+      this.rating = .0,
+      this.onRatingChanged,
+      this.color,
+      this.size = 25,
+      this.alignment = MainAxisAlignment.start})
+      : super(key: key);
 
   Widget buildStar(BuildContext context, int index) {
     Icon icon;
@@ -41,7 +44,7 @@ class StarRating extends StatelessWidget {
     }
     return InkResponse(
       onTap:
-          onRatingChanged == null ? null : () => onRatingChanged(index + 1.0),
+          onRatingChanged != null ? () => onRatingChanged!(index + 1.0) : null,
       child: icon,
     );
   }
@@ -49,6 +52,7 @@ class StarRating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: alignment,
       children: List.generate(
         starCount,
         (index) => buildStar(context, index),

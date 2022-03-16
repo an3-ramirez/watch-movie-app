@@ -6,3 +6,5 @@ class User {
     required this.password,
   });
 }
+
+User emptyUser() => User(name: '', password: '');

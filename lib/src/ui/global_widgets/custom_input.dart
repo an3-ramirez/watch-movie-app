@@ -20,6 +20,9 @@ class CustomInput extends StatelessWidget {
       padding: const EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 20),
       margin: const EdgeInsets.only(bottom: 40),
       child: TextFormField(
+        keyboardType: keyboardType,
+        obscureText: isPassword,
+        controller: textController,
         cursorColor: Colors.white,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(

@@ -2,138 +2,157 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /** Providers */
-import 'package:watch_movie_app/src/data/providers/movie_provider.dart';
+import 'package:watch_movie_app/src/domain/providers/movie_provider.dart';
+import 'package:watch_movie_app/src/routes/routes.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/card_image.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/card_movie_list.dart';
+import 'package:watch_movie_app/src/ui/global_widgets/custom_app_bar.dart';
 
 /** Widgets */
-import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/star_rating.dart';
 
 /** Models */
 import 'package:watch_movie_app/src/data/models/movie.dart';
+import 'package:watch_movie_app/src/ui/pages/fovorite/favorite_state_notifier.dart';
 
 import 'package:watch_movie_app/src/utils/utils.dart';
-import 'package:watch_movie_app/src/core/constants/constants.dart';
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
 
 class HomePage extends ConsumerWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Responsive responsive = Responsive(context);
+    final List<Movie> favoriteMovies = ref.watch(favoriteStateProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(right: 10),
-            child: InkWell(
-              onTap: () {
-                print('logut user');
-              },
-              child: const Icon(Icons.settings, color: Colors.white54),
-            ),
-          )
-        ],
-      ),
-      body: Container(
-        padding: const EdgeInsets.only(left: 15),
+      appBar: const CustomAppBar(title: 'Home'),
+      body: SizedBox(
         height: responsive.height,
         width: responsive.width,
-        decoration: const BoxDecoration(color: primaryColor),
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _title('Popular'),
-              ref.watch(moviesFutureProvider).when(
-                    error: (e, s) {
-                      return const Text("error");
-                    },
-                    loading: () => SizedBox(
-                      height: responsive.hp(35),
-                      child: const Center(
-                        child: CircularProgressIndicator(color: Colors.white),
-                      ),
-                    ),
-                    data: (movies) => SizedBox(
-                      height: responsive.hp(35),
-                      child: ListView.builder(
-                        physics: const ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: movies.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (_, i) {
-                          return _carMovie(_, movies[i]);
-                        },
-                      ),
-                    ),
-                  ),
-              const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.only(right: 30),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    'See All >',
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: accentColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: defaultPaddingHorizontal),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Popular',
+                  style: textWhite.copyWith(fontSize: 24),
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: 15),
-                child: Divider(color: Colors.white70),
-              ),
-              _title('Recommendations'),
-              ref.watch(moviesRecomendedFutureProvider).when(
-                    error: (e, s) {
-                      return const Text("error");
-                    },
-                    loading: () => SizedBox(
-                      height: responsive.hp(35),
-                      child: const Center(
-                        child: CircularProgressIndicator(color: Colors.white),
-                      ),
-                    ),
-                    data: (movies) => SingleChildScrollView(
-                      child: ListView.builder(
-                        physics: const ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 5,
-                        itemBuilder: (_, i) {
-                          return _carMovieVertical(_, movies[i]);
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: responsive.hp(35),
+                  child: ref.watch(moviesFutureProvider).when(
+                        error: (e, s) {
+                          return const Text("error");
                         },
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        ),
+                        data: (movies) => ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: movies.length > 10 ? 10 : movies.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (_, i) {
+                            return _carMovieHorizontal(_, ref, movies[i]);
+                          },
+                        ),
                       ),
-                    ),
-                  )
-            ],
+                ),
+                const SizedBox(height: 20),
+                iconTextButton(context),
+                const Padding(
+                  padding: EdgeInsets.only(right: 15),
+                  child: Divider(color: Colors.white70),
+                ),
+                Text(
+                  'Recommendations',
+                  style: textWhite.copyWith(fontSize: 24),
+                ),
+                const SizedBox(height: 20),
+                ref.watch(moviesRecomendedFutureProvider).when(
+                      error: (e, s) {
+                        return const Text("error");
+                      },
+                      loading: () => SizedBox(
+                        height: responsive.hp(35),
+                        child: const Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        ),
+                      ),
+                      data: (movies) => SingleChildScrollView(
+                        child: ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: movies.length,
+                          itemBuilder: (_, i) {
+                            return CardMovieList(
+                              movie: movies[i],
+                              onFavorite: () => onFavoriteMovie(ref, movies[i]),
+                              isFavorite:
+                                  isFavorite(ref, movies[i], favoriteMovies),
+                              onWatchNow: () =>
+                                  navigateDetailPage(context, ref, movies[i]),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _title(String text) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15),
-      child: Text(
-        text,
-        style: textWhite.copyWith(fontSize: 24),
+  Widget iconTextButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 30),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: InkWell(
+          onTap: () => Navigator.pushNamed(context, Routes.SERIE),
+          child: const Text(
+            'See All >',
+            style: TextStyle(
+              fontSize: 22,
+              color: accentColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _carMovie(context, Movie movie) {
+  Widget _carMovieHorizontal(BuildContext context, WidgetRef ref, Movie movie) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _imageCard(movie.fullImageUrl),
+        Flexible(
+          flex: 3,
+          child: CardImage(
+            onPress: () => navigateDetailPage(context, ref, movie),
+            imageUrl: movie.fullImageUrl,
+            heigth: 200,
+            width: 150,
+          ),
         ),
-        _subTitle(movie.name, 150),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          width: 130,
+          child: Text(
+            movie.name,
+            style: const TextStyle(color: Colors.white, fontSize: 18),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         StarRating(
           rating: movie.score,
           color: Colors.white54,
@@ -144,87 +163,21 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _carMovieVertical(context, Movie movie) {
-    Responsive responsive = Responsive(context);
-
-    return Row(
-      //crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 25),
-          child: _imageCard(movie.fullImageUrl),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _subTitle(movie.name, 200),
-              StarRating(
-                rating: movie.score,
-                color: Colors.white54,
-                size: 15,
-                onRatingChanged: (rating) {},
-              ),
-              const SizedBox(height: 15),
-              const Text(
-                'IMDb: 9,4',
-                style: TextStyle(color: Colors.white54),
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    height: 65,
-                    width: responsive.wp(39),
-                    //color: Colors.amber,
-                    child: const RoundButton(
-                      textBtn: 'Watch Now',
-                      fontWeight: FontWeight.normal,
-                      paddingHorizontal: 0,
-                      paddingVertical: 8,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  InkWell(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.favorite_border_outlined,
-                      color: Colors.white54,
-                      size: 40,
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        )
-      ],
-    );
+  bool isFavorite(WidgetRef ref, Movie movie, List<Movie> favorites) {
+    try {
+      favorites.firstWhere((element) => element.id == movie.id);
+      return true;
+    } on StateError {
+      return false;
+    }
   }
 
-  Container _imageCard(String url) {
-    return Container(
-      margin: const EdgeInsets.only(right: 23.0),
-      width: 150,
-      height: 170,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(url),
-          fit: BoxFit.cover,
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    );
+  void onFavoriteMovie(WidgetRef ref, Movie movie) {
+    ref.read(favoriteStateProvider.notifier).addOrRemove(movie);
   }
 
-  Widget _subTitle(String text, double width) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
-      width: width,
-      child: Text(
-        text,
-        style: const TextStyle(color: Colors.white, fontSize: 20),
-      ),
-    );
+  void navigateDetailPage(BuildContext context, WidgetRef ref, Movie movie) {
+    ref.read(movieIdSelectProvider.state).state = movie.id;
+    Navigator.pushNamed(context, Routes.SERIE_DETAIL);
   }
 }

@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:watch_movie_app/src/data/models/models.dart';
+import 'package:watch_movie_app/src/domain/enums/enum_login_status.dart';
+import 'package:watch_movie_app/src/domain/models/auth_repository.dart';
+import 'package:watch_movie_app/src/domain/models/models.dart';
 import 'package:watch_movie_app/src/routes/routes.dart';
+
+import 'package:watch_movie_app/src/ui/pages/login/login_state.dart';
+import 'package:watch_movie_app/src/utils/utils.dart';
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
+
+/** Global widgets */
 import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/custom_input.dart';
-
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
-import 'package:watch_movie_app/src/utils/responsive.dart';
-import 'package:watch_movie_app/src/core/constants/constants.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerStatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends ConsumerState<LoginPage> {
+  final nameCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Responsive responsive = Responsive(context);
+    final Auth loginState = ref.watch(loginStateProvider);
+    final bool loading = loginState.status == LoginStatus.loading;
 
     return SafeArea(
       child: Stack(
@@ -32,7 +50,10 @@ class LoginPage extends StatelessWidget {
                         style: textWhite,
                       ),
                     ),
-                    _formLogin(context)
+                    _formLogin(
+                      context,
+                      loading,
+                    )
                   ],
                 ),
               ),
@@ -43,10 +64,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _formLogin(context) {
-    final nameCtrl = TextEditingController();
-    final passCtrl = TextEditingController();
-
+  Widget _formLogin(BuildContext context, bool loading) {
     return Container(
       height: 420,
       width: double.infinity,
@@ -71,21 +89,39 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           CustomInput(placeholder: 'Name', textController: nameCtrl),
-          CustomInput(placeholder: 'Password', textController: passCtrl),
+          CustomInput(
+            placeholder: 'Password',
+            textController: passCtrl,
+            isPassword: true,
+          ),
           const SizedBox(height: 40),
           RoundButton(
-            textBtn: 'Log in',
+            textBtn: loading ? 'Loading...' : 'Log in',
             color: Colors.white,
-            onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                Routes.HOME,
-                (_) => false,
-              );
-            },
-          )
+            onPressed: loading ? null : () => onLogin(),
+          ),
         ],
       ),
     );
+  }
+
+  void onLogin() async {
+    FocusScope.of(context).unfocus();
+    User user = User(
+      name: nameCtrl.text.trim(),
+      password: passCtrl.text.trim(),
+    );
+    AuthRepository authRepository =
+        await ref.read(loginStateProvider.notifier).login(user);
+
+    if (authRepository.status) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        Routes.ROOT,
+        (_) => false,
+      );
+    } else {
+      showSnackBar(context, authRepository.message);
+    }
   }
 }
