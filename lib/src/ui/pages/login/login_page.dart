@@ -5,14 +5,15 @@ import 'package:watch_movie_app/src/domain/enums/enum_login_status.dart';
 import 'package:watch_movie_app/src/domain/models/auth_repository.dart';
 import 'package:watch_movie_app/src/domain/models/models.dart';
 import 'package:watch_movie_app/src/routes/routes.dart';
+
+import 'package:watch_movie_app/src/ui/pages/login/login_state.dart';
+import 'package:watch_movie_app/src/utils/utils.dart';
+import 'package:watch_movie_app/src/domain/constants/constants.dart';
+
+/** Global widgets */
 import 'package:watch_movie_app/src/ui/global_widgets/background_image.dart';
 import 'package:watch_movie_app/src/ui/global_widgets/custom_input.dart';
-
 import 'package:watch_movie_app/src/ui/global_widgets/round_button.dart';
-import 'package:watch_movie_app/src/ui/pages/login/login_state.dart';
-import 'package:watch_movie_app/src/utils/alerts.dart';
-import 'package:watch_movie_app/src/utils/responsive.dart';
-import 'package:watch_movie_app/src/domain/constants/constants.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   @override

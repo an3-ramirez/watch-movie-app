@@ -14,7 +14,7 @@ const String fakeMovies = '''
                 "CO"
             ],
             "original_language": "es",
-            "original_name": "Pasión de gavilanes",
+            "original_name": "Pasión de gavilanes fake",
             "overview": "The Reyes-Elizondo's idyllic lives are shattered by a murder charge against Eric and León.",
             "popularity": 1674.82,
             "poster_path": "/lWlsZIsrGVWHtBeoOeLxIKDd9uy.jpg",
@@ -33,7 +33,7 @@ const String fakeMovies = '''
                 "US"
             ],
             "original_language": "en",
-            "original_name": "Euphoria",
+            "original_name": "Euphoria fake",
             "overview": "A group of high school students navigate love and friendships in a world of drugs, sex, trauma, and social media.",
             "popularity": 2233.081,
             "poster_path": "/jtnfNzqZwN4E32FGGxx1YZaBWWf.jpg",
